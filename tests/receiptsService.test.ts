@@ -33,7 +33,19 @@ describe('Components of receipts service', () => {
         assert.strictEqual(components.processTotal(total), 25);
     });
 
-    test.todo('processes items properly', async () => {});
+    test('processes items properly', async () => {
+        let items = receipts[0].items;
+        assert.strictEqual(components.processItems(items), 16);
+
+        items = receipts[1].items;
+        assert.strictEqual(components.processItems(items), 10);
+
+        items = receipts[2].items;
+        assert.strictEqual(components.processItems(items), 6);
+
+        items = receipts[3].items;
+        assert.strictEqual(components.processItems(items), 0);
+    });
 
     test.todo('processes date properly', async () => {});
 

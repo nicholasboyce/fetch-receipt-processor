@@ -7,7 +7,7 @@ import { z } from 'zod';
 // import { UUID } from 'crypto';
 
 export const itemSchema = z.object({
-    shortDescription: z.string().regex(new RegExp('^[\\w\\s\\-]+$')),
+    shortDescription: z.string().regex(new RegExp('^[\\w\\s\\-]+$')).trim(),
     price: z.string().regex(new RegExp('^\\d+\\.\\d{2}$'))
 });
 

@@ -38,6 +38,14 @@ const processTotal = (total: string) : number => {
 const processItems = (items: item[]) : number => {
     let points = 0;
 
+    points += Math.floor(items.length / 2) * 5;
+
+    for (let i = 0; i < items.length; i++) {
+        if (items[i].shortDescription.trim().length % 3 == 0) {
+            points += Math.ceil(Number.parseFloat(items[i].price) * 0.2);
+        }
+    }
+
     return points;
 };
 
