@@ -47,7 +47,19 @@ describe('Components of receipts service', () => {
         assert.strictEqual(components.processItems(items), 0);
     });
 
-    test.todo('processes date properly', async () => {});
+    test('processes date properly', async () => {
+        let date = receipts[0].purchaseDate; // '2022-01-01'
+        assert.strictEqual(components.processDate(date), 6);
+
+        date = receipts[1].purchaseDate; // '2022-03-20'
+        assert.strictEqual(components.processDate(date), 0);
+
+        date = receipts[2].purchaseDate; // '2022-01-02'
+        assert.strictEqual(components.processDate(date), 0);
+
+        date = receipts[3].purchaseDate; // '2022-01-02'
+        assert.strictEqual(components.processDate(date), 0);
+    });
 
     test.todo('processes time properly', async () => {});
 });
