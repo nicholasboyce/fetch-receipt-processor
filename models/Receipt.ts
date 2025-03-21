@@ -15,7 +15,7 @@ export const receiptSchema = z.object({
     id: z.string().uuid(),
     retailer: z.string().regex(new RegExp('^[\\w\\s\\-&]+$')),
     purchaseDate: z.string().date(),
-    purchaseTime: z.string(), //TBU
+    purchaseTime: z.string().time(), //TBU
     items: z.array(itemSchema).min(1),
     total: z.string().regex(new RegExp('^\\d+\\.\\d{2}$'))
 });

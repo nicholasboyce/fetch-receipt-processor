@@ -63,10 +63,15 @@ const processDate = (date: string) : number => {
 const processTime = (time: string) : number => {
     let points = 0;
 
+    const hours = Number.parseInt(time.slice(0, 3));
+    if (13 < hours && hours < 16) {
+        points += 10;
+    } 
+
     return points;
 };
 
-const processReceipt = async (receipt: newReceipt) => {
+const processReceipt = (receipt: newReceipt) => {
     let points = 0;
 
     points += processRetailer(receipt.retailer);

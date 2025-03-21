@@ -1,11 +1,11 @@
 import { describe, test, before, after, beforeEach } from 'node:test';
 import assert from 'node:assert';
 import { z } from 'zod';
-import { components } from '../receiptsService';
+import { components, receiptsService } from '../receiptsService';
 import receipts from "./resources/receipts.json";
 
 describe('Components of receipts service', () => {
-    test('processes retailer properly', async () => {
+    test('process retailer properly', async () => {
         let retailer = receipts[0].retailer; // 'Target'
         assert.strictEqual(components.processRetailer(retailer), 6);
 
@@ -19,7 +19,7 @@ describe('Components of receipts service', () => {
         assert.strictEqual(components.processRetailer(retailer), 6);
     });
 
-    test('processes total properly', async () => {
+    test('process total properly', async () => {
         let total = receipts[0].total; // '35.35'
         assert.strictEqual(components.processTotal(total), 0);
 
@@ -33,7 +33,7 @@ describe('Components of receipts service', () => {
         assert.strictEqual(components.processTotal(total), 25);
     });
 
-    test('processes items properly', async () => {
+    test('process items properly', async () => {
         let items = receipts[0].items;
         assert.strictEqual(components.processItems(items), 16);
 
@@ -47,7 +47,7 @@ describe('Components of receipts service', () => {
         assert.strictEqual(components.processItems(items), 0);
     });
 
-    test('processes date properly', async () => {
+    test('process date properly', async () => {
         let date = receipts[0].purchaseDate; // '2022-01-01'
         assert.strictEqual(components.processDate(date), 6);
 
@@ -61,5 +61,25 @@ describe('Components of receipts service', () => {
         assert.strictEqual(components.processDate(date), 0);
     });
 
-    test.todo('processes time properly', async () => {});
+    test('process time properly', async () => {
+        let time = receipts[0].purchaseTime; // '13:01'
+        assert.strictEqual(components.processTime(time), 0);
+
+        time = receipts[1].purchaseTime; // '14:33'
+        assert.strictEqual(components.processTime(time), 10);
+
+        time = receipts[2].purchaseTime; // '08:33'
+        assert.strictEqual(components.processTime(time), 0);
+
+        time = receipts[2].purchaseTime; // '13:13'
+        assert.strictEqual(components.processTime(time), 0);
+    });
+});
+
+test('Receipts service processes points from receipt properly', async () => {
+    const points = [28, 109, 15, 31];
+
+    for (let i = 0; i < receipts.length; i++) {
+        assert.strictEqual(receiptsService.processReceipt(receipts[i]), points[i]);
+    }
 });
