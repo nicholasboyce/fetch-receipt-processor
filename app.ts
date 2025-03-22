@@ -2,13 +2,14 @@ import express from 'express';
 import 'express-async-errors';
 import session from 'express-session';
 import { receiptsRouter } from './receiptsRouter';
+import config from './utils/config';
 
 const app = express();
 
 app.use(express.json());
 app.use(
     session({
-        secret: 'secret',
+        secret: config.SESSION_SECRET,
         saveUninitialized: false,
         resave: false,
         cookie: {
