@@ -4,25 +4,22 @@ import {
 } from 'kysely';
 
 import { z } from 'zod';
-// import { UUID } from 'crypto';
-
-export const itemSchema = z.object({
-    shortDescription: z.string().regex(new RegExp('^[\\w\\s\\-]+$')).trim(),
-    price: z.string().regex(new RegExp('^\\d+\\.\\d{2}$'))
-});
+import { newItemSchema } from './Item';
 
 export const receiptSchema = z.object({
     id: z.string().uuid(),
     retailer: z.string().regex(new RegExp('^[\\w\\s\\-&]+$')),
     purchaseDate: z.string().date(),
     purchaseTime: z.string().time(), //TBU
-    items: z.array(itemSchema).min(1),
-    total: z.string().regex(new RegExp('^\\d+\\.\\d{2}$'))
+    items: z.array(newItemSchema).min(1),
+    total: z.string().regex(new RegExp('^\\d+\\.\\d{2}$')),
+    points: z.number()
 });
 
-export const newReceiptSchema = receiptSchema.omit({ id: true });
+export const newReceiptSchema = receiptSchema.omit({ id: true, points: true });
+export const dbReceiptSchema = receiptSchema.omit({ items: true });
 
-export interface ReceiptTable extends z.infer<typeof receiptSchema>{};
+export interface ReceiptTable extends z.infer<typeof dbReceiptSchema>{};
 
 export type SavedReceipt = Selectable<ReceiptTable>;
 export type NewProcessedReceipt = Insertable<ReceiptTable>;
