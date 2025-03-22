@@ -29,6 +29,7 @@ ADR
 links.md
 CONTRIBUTING.md
 LICENSE.md
+README.md
 
 #helper files
 writeToJSON.ts
