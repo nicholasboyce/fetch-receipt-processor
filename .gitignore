@@ -23,17 +23,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-ADR
 
 #Markdown
 links.md
 CONTRIBUTING.md
 LICENSE.md
 README.md
-
-#helper files
-writeToJSON.ts
-
-# Config files
-eslint.config.mjs
-.prettierrc.json
