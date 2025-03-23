@@ -9,7 +9,6 @@ const saveReceipt = async (receipt: processedReceipt) : Promise<{id: string} | n
             .returning('id')
             .executeTakeFirstOrThrow();
     } catch (error) {
-        console.log(error);
         return null;
     }
 };
@@ -21,7 +20,6 @@ const getReceiptPoints = async (id: UUID) : Promise<{points: number} | null> => 
             .select('points')
             .executeTakeFirstOrThrow();
     } catch (error) {
-        console.log(error);
         return null;
     }
 };

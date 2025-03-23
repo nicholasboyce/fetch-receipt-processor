@@ -6,7 +6,7 @@ import { UUID } from "crypto";
 const getReceiptPoints: RequestHandler<{id: UUID}> = async (req, res) => {
     const id = req.params.id;
     const points = await receiptsService.getReceiptPoints(id);
-    points !== null ? res.json(points) : res.status(404).json({ message: 'No receipt found for that ID.' });
+    points ? res.json(points) : res.status(404).json({ message: 'No receipt found for that ID.' });
 };
 
 const processReceipt: RequestHandler<any, any, validatedReceipt> = async (req, res) => {
