@@ -2,14 +2,21 @@ import express from 'express';
 import 'express-async-errors';
 import session from 'express-session';
 import { receiptsRouter } from './router/receiptsRouter';
-import config from './utils/config';
+import { db } from './database';
+import { up } from './migrations/migrate';
+
+db.connection()
+    .execute(async (db) => {
+        await up(db);
+    })
+    .then(() => console.log('Connected to SQLite Database!'));
 
 const app = express();
 
 app.use(express.json());
 app.use(
     session({
-        secret: config.SESSION_SECRET,
+        secret: 'secret',
         saveUninitialized: false,
         resave: false,
         cookie: {
