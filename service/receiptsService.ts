@@ -1,9 +1,12 @@
 import { z } from 'zod';
-import { newReceiptSchema, itemSchema } from "./models/Receipt";
-import { SavedReceipt } from './models/Receipt';
+import { newReceiptSchema, dbReceiptSchema, NewProcessedReceipt } from "../models/Receipt";
+import { dbItemsSchema, newItemSchema } from '../models/Item';
+import { receiptsRepository } from '../repository/receiptsRepository';
+import { UUID } from 'crypto';
+import { itemRepository } from '../repository/itemRepository';
 
 interface newReceipt extends z.infer<typeof newReceiptSchema>{};
-interface item extends z.infer<typeof itemSchema>{};
+interface item extends z.infer<typeof newItemSchema>{};
 
 const processRetailer = (retailer: string) : number => {
     let points = 0;
@@ -83,8 +86,39 @@ const processReceipt = (receipt: newReceipt) => {
     return points;
 };
 
+const saveReceipt = async (receipt: newReceipt, points: number) => {
+    const id = crypto.randomUUID();
+    const parsedReceiptResult = dbReceiptSchema.safeParse({id, ...receipt, points}); // roundabout but 
+
+    const updatedItems = receipt.items.map((curr_item) => ({...curr_item, id}));
+    const parsedItemsResult = dbItemsSchema.safeParse(updatedItems);
+
+    if (!parsedReceiptResult.success || !parsedItemsResult.success) {
+        return null;
+    }
+
+    const savedReceiptID = await receiptsRepository.saveReceipt(parsedReceiptResult.data);
+    if (!savedReceiptID) {
+        return null;
+    }
+
+    const savedItems = await itemRepository.saveItems(parsedItemsResult.data);
+    if (!savedItems) {
+        return null;
+    }
+
+    return savedReceiptID;
+};
+
+const getReceiptPoints = async (id : UUID) => {
+    const points = await receiptsRepository.getReceiptPoints(id);
+    return points;
+};
+
 export const receiptsService = {
-    processReceipt
+    processReceipt,
+    saveReceipt,
+    getReceiptPoints
 };
 
 export const components = {

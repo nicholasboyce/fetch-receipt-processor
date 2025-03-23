@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { receiptsController } from "./receiptsController";
-import { validateBody } from "./utils/middleware";
-import { newReceiptSchema } from "./models/Receipt";
+import { receiptsController } from "../controller/receiptsController";
+import { validateBody } from "../utils/middleware";
+import { newReceiptSchema } from "../models/Receipt";
 
 const receiptsRouter = Router();
 

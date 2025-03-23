@@ -1,7 +1,7 @@
 import express from 'express';
 import 'express-async-errors';
 import session from 'express-session';
-import { receiptsRouter } from './receiptsRouter';
+import { receiptsRouter } from './router/receiptsRouter';
 import config from './utils/config';
 
 const app = express();

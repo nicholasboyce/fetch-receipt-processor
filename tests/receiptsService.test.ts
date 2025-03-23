@@ -1,7 +1,10 @@
-import { describe, test } from 'node:test';
+import { after, before, describe, test } from 'node:test';
 import assert from 'node:assert';
-import { components, receiptsService } from '../receiptsService';
+import { components, receiptsService } from '../service/receiptsService';
 import receipts from "./resources/receipts.json";
+// import { migrateToLatest } from '../utils/migrations';
+import { db } from '../database';
+import { UUID } from 'node:crypto';
 
 describe('Components of receipts service', () => {
     test('process retailer properly', async () => {
@@ -81,4 +84,56 @@ test('Receipts service processes points from receipt properly', async () => {
     for (let i = 0; i < receipts.length; i++) {
         assert.strictEqual(receiptsService.processReceipt(receipts[i]), points[i]);
     }
+});
+
+describe('Service functions which interact with repository', () => {
+
+    before(async () => {
+        await db.schema.createTable('receipt')
+            .ifNotExists()
+            .addColumn('id', 'uuid', (col) => col.primaryKey())
+            .addColumn('retailer', 'varchar(200)', (col) => col.notNull())
+            .addColumn('purchaseDate', 'varchar(10)', (col) => col.notNull())
+            .addColumn('purchaseTime', 'varchar(5)', (col) => col.notNull())
+            .addColumn('total', 'varchar(5)', (col) => col.notNull())
+            .addColumn('points', 'integer', (col) => col.notNull())
+            .execute(); 
+
+        await db.schema.createTable('item')
+            .ifNotExists()
+            .addColumn('id', 'uuid', (col) => col.notNull())
+            .addColumn('shortDescription', 'varchar(300)', (col) => col.notNull())
+            .addColumn('price', 'varchar(5)', (col) => col.notNull())
+            .execute();
+    });
+
+    test('save receipt with points and UUID correctly', async () => {
+        const points = 28;
+        const receipt = receipts[0];
+
+        const response = await receiptsService.saveReceipt(receipt, points);
+
+        assert.notStrictEqual(response, null);
+        assert.ok(response?.id);
+    });
+
+    test('retrieve points associated with UUID correctly', async () => {
+        const points = 109;
+        const receipt = receipts[1];
+
+        const idResponse = await receiptsService.saveReceipt(receipt, points);
+
+        if (!idResponse) assert.fail();
+
+        const pointsResponse = await receiptsService.getReceiptPoints(idResponse.id as UUID);
+
+        assert.notStrictEqual(pointsResponse, null);
+        assert.strictEqual(pointsResponse?.points, points);
+    });
+
+    after(async () => {
+        await db.deleteFrom('receipt').execute();
+        await db.deleteFrom('item').execute();
+        await db.destroy();
+    });
 });

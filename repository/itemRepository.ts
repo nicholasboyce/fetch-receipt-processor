@@ -1,6 +1,6 @@
 import { UUID } from "crypto";
-import { db } from "./database";
-import { Item } from "./models/Item";
+import { db } from "../database";
+import { Item } from "../models/Item";
 
 const saveItems = async (items: Item[]) => {
     try {

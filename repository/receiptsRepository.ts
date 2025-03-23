@@ -1,6 +1,6 @@
 import { UUID } from "crypto";
-import { db } from "./database";
-import { NewProcessedReceipt } from "./models/Receipt";
+import { db } from "../database";
+import { NewProcessedReceipt } from "../models/Receipt";
 
 const saveReceipt = async (receipt: NewProcessedReceipt) : Promise<{id: string} | null> => {
     try {
