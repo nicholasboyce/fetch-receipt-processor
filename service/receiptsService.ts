@@ -63,7 +63,7 @@ const processDate = (date: string): number => {
 const processTime = (time: string): number => {
   let points = 0;
 
-  const hours = Number.parseInt(time.slice(0, 3));
+  const hours = Number.parseInt(time.slice(0, 2));
   if (13 < hours && hours < 16) {
     points += 10;
   }

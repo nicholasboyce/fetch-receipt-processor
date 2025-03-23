@@ -1,5 +1,6 @@
 import { db } from '../database';
 import { dbItems, ItemTable as dbItem } from '../models/Item';
+import { logger } from '../utils/logger';
 
 const saveItems = async (items: dbItems) => {
   try {
@@ -11,7 +12,7 @@ const saveItems = async (items: dbItems) => {
       .execute();
   } catch (error) {
     if (error instanceof Error) {
-      console.log('Failed to save items.');
+      logger.error('Failed to save items.');
     }
     return null;
   }

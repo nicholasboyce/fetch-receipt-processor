@@ -1,6 +1,7 @@
 import { UUID } from 'crypto';
 import { db } from '../database';
 import { ReceiptTable as processedReceipt } from '../models/Receipt';
+import { logger } from '../utils/logger';
 
 const saveReceipt = async (
   receipt: processedReceipt,
@@ -13,7 +14,7 @@ const saveReceipt = async (
       .executeTakeFirstOrThrow();
   } catch (error) {
     if (error instanceof Error) {
-      console.log('Failed to save receipt.');
+      logger.error('Failed to save receipt.');
     }
     return null;
   }
@@ -30,7 +31,7 @@ const getReceiptPoints = async (
       .executeTakeFirstOrThrow();
   } catch (error) {
     if (error instanceof Error) {
-      console.log('Failed to retrieve points associated with id.');
+      logger.error('Failed to retrieve points associated with id.');
     }
     return null;
   }

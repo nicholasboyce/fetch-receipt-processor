@@ -3,13 +3,14 @@ import 'express-async-errors';
 import { receiptsRouter } from './router/receiptsRouter';
 import { db } from './database';
 import { up } from './migrations/migrate';
+import { logger } from './utils/logger';
 import { requestLogger } from './utils/middleware';
 
 db.connection()
   .execute(async (db) => {
     await up(db);
   })
-  .then(() => console.log('Connected to SQLite Database!'));
+  .then(() => logger.info('Connected to SQLite Database!'));
 
 const app = express();
 
