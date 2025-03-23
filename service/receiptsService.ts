@@ -1,12 +1,9 @@
-import { z } from 'zod';
 import { receiptDBSchema, validatedReceipt } from '../models/Receipt';
-import { dbItemsSchema, newItemSchema } from '../models/Item';
+import { dbItemsSchema, validatedItem } from '../models/Item';
 import { receiptsRepository } from '../repository/receiptsRepository';
 import { UUID } from 'crypto';
 import { itemRepository } from '../repository/itemRepository';
 
-
-interface item extends z.infer<typeof newItemSchema>{};
 
 const processRetailer = (retailer: string) : number => {
     let points = 0;
@@ -38,7 +35,7 @@ const processTotal = (total: string) : number => {
     return points;
 };
 
-const processItems = (items: item[]) : number => {
+const processItems = (items: validatedItem[]) : number => {
     let points = 0;
 
     points += Math.floor(items.length / 2) * 5;
@@ -88,7 +85,7 @@ const processReceipt = (receipt: validatedReceipt) => {
 
 const saveReceipt = async (receipt: validatedReceipt, points: number) => {
     const id = crypto.randomUUID();
-    const parsedReceiptResult = receiptDBSchema.safeParse({id, ...receipt, points}); // roundabout but 
+    const parsedReceiptResult = receiptDBSchema.safeParse({id, ...receipt, points}); // make sure obj spreading successful
 
     const updatedItems = receipt.items.map((curr_item) => ({...curr_item, id}));
     const parsedItemsResult = dbItemsSchema.safeParse(updatedItems);

@@ -7,8 +7,8 @@ export const itemSchema = z.object({
 });
 
 export const newItemSchema = itemSchema.omit({id: true});
+export const dbItemsSchema = itemSchema.array().min(1);
 
 export interface ItemTable extends z.infer<typeof itemSchema>{};
-
-export const dbItemsSchema = itemSchema.array().min(1);
+export interface validatedItem extends z.infer<typeof newItemSchema>{};
 export interface dbItems extends z.infer<typeof dbItemsSchema>{};

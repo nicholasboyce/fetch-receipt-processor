@@ -1,8 +1,3 @@
-import {
-    Insertable,
-    Selectable,
-} from 'kysely';
-
 import { z } from 'zod';
 import { newItemSchema } from './Item';
 
@@ -21,6 +16,3 @@ export const receiptDBSchema = receiptSchema.omit({ items: true });
 
 export interface validatedReceipt extends z.infer<typeof receiptReqBodySchema>{};
 export interface ReceiptTable extends z.infer<typeof receiptDBSchema>{};
-
-export type SavedReceipt = Selectable<ReceiptTable>;
-export type NewProcessedReceipt = Insertable<ReceiptTable>;

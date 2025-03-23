@@ -1,13 +1,12 @@
-import { UUID } from "crypto";
 import { db } from "../database";
-import { Item } from "../models/Item";
+import { dbItems, ItemTable as dbItem } from "../models/Item";
 
-const saveItems = async (items: Item[]) => {
+const saveItems = async (items: dbItems) => {
     try {
         return await db.insertInto('item')
             .values(items)
             .returningAll()
-            .$assertType<Item>()
+            .$assertType<dbItem>()
             .execute();
     } catch (error) {
         console.log(error);
