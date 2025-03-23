@@ -53,7 +53,7 @@ const processDate = (date: string): number => {
   let points = 0;
 
   const convertedDate = new Date(date);
-  if (convertedDate.getDay() % 2 == 1) {
+  if (convertedDate.getUTCDate() % 2 == 1) {
     points += 6;
   }
 
