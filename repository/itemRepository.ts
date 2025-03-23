@@ -10,7 +10,9 @@ const saveItems = async (items: dbItems) => {
       .$assertType<dbItem>()
       .execute();
   } catch (error) {
-    console.log(error.name);
+    if (error instanceof Error) {
+      console.log('Failed to save items.');
+    }
     return null;
   }
 };

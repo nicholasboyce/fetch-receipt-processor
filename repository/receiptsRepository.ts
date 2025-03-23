@@ -12,7 +12,9 @@ const saveReceipt = async (
       .returning('id')
       .executeTakeFirstOrThrow();
   } catch (error) {
-    console.log(error.name);
+    if (error instanceof Error) {
+      console.log('Failed to save receipt.');
+    }
     return null;
   }
 };
@@ -27,7 +29,9 @@ const getReceiptPoints = async (
       .select('points')
       .executeTakeFirstOrThrow();
   } catch (error) {
-    console.log(error.name);
+    if (error instanceof Error) {
+      console.log('Failed to retrieve points associated with id.');
+    }
     return null;
   }
 };
