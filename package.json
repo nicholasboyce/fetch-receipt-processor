@@ -7,6 +7,8 @@
     "test": "NODE_ENV=test node --import tsx --test tests/**/*.test.ts",
     "start": "NODE_ENV=production node ./dist/index.js",
     "dev": "NODE_ENV=development nodemon index.ts",
+    "lint": "eslint --ext .js,.ts",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "build": "npx tsc"
   },
   "keywords": [],
@@ -21,16 +23,24 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.23.0",
     "@types/better-sqlite3": "^7.6.12",
     "@types/express": "^5.0.1",
     "@types/express-serve-static-core": "^5.0.6",
     "@types/express-session": "^1.18.1",
     "@types/node": "^22.13.11",
     "@types/supertest": "^6.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.27.0",
+    "@typescript-eslint/parser": "^8.27.0",
+    "eslint": "^9.23.0",
+    "eslint-config-prettier": "^10.1.1",
+    "globals": "^16.0.0",
     "nodemon": "^3.1.9",
+    "prettier": "^3.5.3",
     "supertest": "^7.1.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.27.0"
   }
 }

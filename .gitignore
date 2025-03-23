@@ -33,3 +33,7 @@ README.md
 
 #helper files
 writeToJSON.ts
+
+# Config files
+eslint.config.mjs
+.prettierrc.json
