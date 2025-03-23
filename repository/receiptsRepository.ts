@@ -1,8 +1,8 @@
 import { UUID } from "crypto";
 import { db } from "../database";
-import { NewProcessedReceipt } from "../models/Receipt";
+import { ReceiptTable as processedReceipt } from "../models/Receipt";
 
-const saveReceipt = async (receipt: NewProcessedReceipt) : Promise<{id: string} | null> => {
+const saveReceipt = async (receipt: processedReceipt) : Promise<{id: string} | null> => {
     try {
         return await db.insertInto('receipt')
             .values(receipt)

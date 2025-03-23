@@ -16,10 +16,11 @@ export const receiptSchema = z.object({
     points: z.number()
 });
 
-export const newReceiptSchema = receiptSchema.omit({ id: true, points: true });
-export const dbReceiptSchema = receiptSchema.omit({ items: true });
+export const receiptReqBodySchema = receiptSchema.omit({ id: true, points: true });
+export const receiptDBSchema = receiptSchema.omit({ items: true });
 
-export interface ReceiptTable extends z.infer<typeof dbReceiptSchema>{};
+export interface validatedReceipt extends z.infer<typeof receiptReqBodySchema>{};
+export interface ReceiptTable extends z.infer<typeof receiptDBSchema>{};
 
 export type SavedReceipt = Selectable<ReceiptTable>;
 export type NewProcessedReceipt = Insertable<ReceiptTable>;

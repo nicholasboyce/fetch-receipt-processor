@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { newReceiptSchema, dbReceiptSchema, NewProcessedReceipt } from "../models/Receipt";
+import { receiptDBSchema, validatedReceipt } from '../models/Receipt';
 import { dbItemsSchema, newItemSchema } from '../models/Item';
 import { receiptsRepository } from '../repository/receiptsRepository';
 import { UUID } from 'crypto';
 import { itemRepository } from '../repository/itemRepository';
 
-interface newReceipt extends z.infer<typeof newReceiptSchema>{};
+
 interface item extends z.infer<typeof newItemSchema>{};
 
 const processRetailer = (retailer: string) : number => {
@@ -74,7 +74,7 @@ const processTime = (time: string) : number => {
     return points;
 };
 
-const processReceipt = (receipt: newReceipt) => {
+const processReceipt = (receipt: validatedReceipt) => {
     let points = 0;
 
     points += processRetailer(receipt.retailer);
@@ -86,9 +86,9 @@ const processReceipt = (receipt: newReceipt) => {
     return points;
 };
 
-const saveReceipt = async (receipt: newReceipt, points: number) => {
+const saveReceipt = async (receipt: validatedReceipt, points: number) => {
     const id = crypto.randomUUID();
-    const parsedReceiptResult = dbReceiptSchema.safeParse({id, ...receipt, points}); // roundabout but 
+    const parsedReceiptResult = receiptDBSchema.safeParse({id, ...receipt, points}); // roundabout but 
 
     const updatedItems = receipt.items.map((curr_item) => ({...curr_item, id}));
     const parsedItemsResult = dbItemsSchema.safeParse(updatedItems);
