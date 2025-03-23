@@ -1,6 +1,5 @@
 import { Kysely } from "kysely";
 
-
 export const up = async (db: Kysely<any>) => {
     await db.schema.createTable('receipt')
         .addColumn('id', 'uuid', (col) => col.primaryKey())
