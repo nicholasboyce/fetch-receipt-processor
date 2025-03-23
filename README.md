@@ -1,6 +1,5 @@
 # Receipt Processing Server
 
-
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
@@ -13,30 +12,6 @@ git clone https://github.com/nicholasboyce/fetch-receipt-processor.git
 ```
 
 I highly recommend using Docker to run this containerized app. Although this app uses SQLite, it uses it as an in-memory database, and so there's no need to use any database images. 
-
-After cloning this repo with the action above, make sure you're in the top of the project folder. This app was linted using ESLint and formatted using Prettier before upload, but if you make changes and would like to lint and format afterwards, you can use
-
-```console
-npm run lint
-```
-
-and 
-
-```console
-npm run format
-```
-
-respectively. You can change the ESLint rules in the eslint.config.mjs file, and the Prettier rules in the .prettierrc.json file.
-
-### Testing
-
-If you'd like to test the code, you can run automated testing against the .test.ts files in the tests folder. I used the new native Node test runner. To run all the tests, you can run
-
-```console
-npm run test
-```
-
-while at the top of the folder, and you should see the results in the console. I implemented unit testing for the components of the service layer that calculated the points for the receipt, and integration testing for the API layer, as well as for the service layer functions that make calls to the database (through the repository layer).
 
 ### Running the App
 
@@ -61,12 +36,56 @@ docker ps
 and at least one of the rows should have the name you chose underneath the "IMAGE" column.
 For convenience's sake, if you'd like to check out the logs from the app within the container, the Docker GUI is pretty accessible.
 
+You can also run
+
+```console
+docker logs <container-id>
+```
+
 To stop the image's container, you can run
 ```console
 docker stop <container-id>
 ```  
 
 NOTE ON PORTS: This app is hard-coded to run on port 7833. If you'd like to change this, you'll need to change it in the index.ts file in the root and re-build the app.
+
+To enter the container to lint, run tests, or edit code via a bash shell, run 
+
+```console
+docker exec -it <container-id or container-name> sh
+```
+
+To exit the container, simply type
+
+```console
+exit
+```
+
+### Linting and Formatting
+
+After entering the container with the action above, make sure you're in the top of the project folder. This app was linted using ESLint and formatted using Prettier before upload, but if you make changes and would like to lint and format afterwards, you can use
+
+```console
+npm run lint
+```
+
+and 
+
+```console
+npm run format
+```
+
+respectively. You can change the ESLint rules in the eslint.config.mjs file, and the Prettier rules in the .prettierrc.json file.
+
+### Testing
+
+If you'd like to test the code, you can run automated testing against the .test.ts files in the tests folder. I used the new native Node test runner. To run all the tests, you can run
+
+```console
+npm run test
+```
+
+while at the top of the folder, and you should see the results in the console. I implemented unit testing for the components of the service layer that calculated the points for the receipt, and integration testing for the API layer, as well as for the service layer functions that make calls to the database (through the repository layer).
 
 ## Notes
 
