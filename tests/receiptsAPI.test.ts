@@ -30,18 +30,24 @@ describe('API returns', () => {
     });
 
     test('200 status code and the ID assigned to the submitted receipt after successful POST request', async () => {
-        const receipt = receipts[0];
 
-        const response = await api
-            .post('/receipts/process')
-            .send(receipt)
-            .expect(200)
-            .expect('Content-Type', /application\/json/);
+        for (let i = 0; i < receipts.length; i++) {
+            const receipt = receipts[i];
+    
+            const response = await api
+                .post('/receipts/process')
+                .send(receipt)
+                .expect(200)
+                .expect('Content-Type', /application\/json/);
+    
+            const data = response.body;
+    
+            assert.ok(data.id);
+            assert.ok(z.string().uuid().safeParse(data.id).success);
+        }
 
-        const data = response.body;
-
-        assert.ok(data.id);
-        assert.ok(z.string().uuid().safeParse(data.id).success);
+        await db.deleteFrom('receipt').execute();
+        await db.deleteFrom('item').execute();
     });
 
     test('400 status code and message property says "The receipt is invalid." after failed POST request', async () => {
@@ -64,27 +70,34 @@ describe('API returns', () => {
     });
 
     test('200 status code and the number of points awarded (as an integer) for the receipt(\'s given ID) after successful GET request', async () => {
-        const receipt = receipts[1];
-        const points = 109;
+        const points = [28, 109, 15, 31];
 
-        const postResponse = await api
-            .post('/receipts/process')
-            .send(receipt)
-            .expect(200)
-            .expect('Content-Type', /application\/json/);
+        for (let i = 0; i < receipts.length; i++) {
+            const receipt = receipts[i];
+            const expectedPoints = points[i];
+    
+            const postResponse = await api
+                .post('/receipts/process')
+                .send(receipt)
+                .expect(200)
+                .expect('Content-Type', /application\/json/);
+    
+            const id = postResponse.body.id;
+    
+            const getResponse = await api
+                .get(`/receipts/${id}/points`)
+                .expect(200)
+                .expect('Content-Type', /application\/json/);
+    
+            const returnedPoints = getResponse.body.points;
+    
+            assert.ok(returnedPoints);
+            assert.ok(z.number().int().safeParse(returnedPoints).success);
+            assert.strictEqual(returnedPoints, expectedPoints);
+        }
 
-        const id = postResponse.body.id;
-
-        const getResponse = await api
-            .get(`/receipts/${id}/points`)
-            .expect(200)
-            .expect('Content-Type', /application\/json/);
-
-        const returnedPoints = getResponse.body.points;
-
-        assert.ok(returnedPoints);
-        assert.ok(z.number().int().safeParse(returnedPoints).success);
-        assert.strictEqual(returnedPoints, points);
+        await db.deleteFrom('receipt').execute();
+        await db.deleteFrom('item').execute();
     });
 
     test('404 status code and message property says "No receipt found for that ID." after failed GET request', async () => {

@@ -2,7 +2,6 @@ import { after, before, describe, test } from 'node:test';
 import assert from 'node:assert';
 import { components, receiptsService } from '../service/receiptsService';
 import receipts from "./resources/receipts.json";
-// import { migrateToLatest } from '../utils/migrations';
 import { db } from '../database';
 import { UUID } from 'node:crypto';
 
